@@ -14,3 +14,4 @@ This project attempts to achieve the following goals:(Some are still in progress
 7- Deform the plane using some sort of procedural method place the points.
 8- Utilize a texture map as input for how the plane is deformed.
 
+Please visit this link for more information: http://alijafargholi.com/2015/12/fabric-engine-point-distribution/
