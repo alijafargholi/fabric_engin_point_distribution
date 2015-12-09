@@ -5,7 +5,7 @@ The purpose of this exercise is to get familiar with Fabric Engine.
 
 This project attempts to achieve the following goals:(Some are still in progress)
 
-1- Utilize KL within yhe Fabric Canvas application.
+1- Utilize KL within the Fabric Canvas application.
 2- Utilize the parallel processing capabilities(PEX).
 3- Gather and Randomize points from a source geometry.
 4- Random percentage subtraction of points.
@@ -13,3 +13,4 @@ This project attempts to achieve the following goals:(Some are still in progress
 6- Distribute based on texture map as input.
 7- Deform the plane using some sort of procedural method place the points.
 8- Utilize a texture map as input for how the plane is deformed.
+
