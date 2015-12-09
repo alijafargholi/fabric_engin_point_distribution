@@ -1,0 +1,39 @@
+require Geometry;
+
+operator InsideGeo<<<index>>>( Xfo inXfos[], io Size points_remaned[], SpatialQueryable target ) {
+
+  Vec3 position = inXfos[index].tr; 
+  Vec3 scaling= Vec3(1,1,1); 
+  Scalar distanceTolerance =1;
+  GeometryLocation location = target.getClosest(position, scaling, distanceTolerance);
+
+  // If the point is not inside the geometry add it to the list
+  if( !location.isValid() )
+    points_remaned.push(index);    
+}
+
+
+dfgEntry {
+  if(mesh==null){
+    report("No Geometry was found to remove points!");
+    result = inXfos;
+    return;
+  }
+  PolygonMesh target = mesh;
+  
+  //Initialize options to use a sparse grid
+  GenericValueContainer options = GenericValueContainer();
+  PrepareForSpatialQueries_setSparseGrid(options);
+
+  //Prepare for one query per source point
+  target.prepareForSpatialQueries( inXfos.size(), options );
+  
+  // Calculating the contact with subtract geometry
+  InsideGeo<<<inXfos.size()>>>( inXfos, outSidePoints, target );
+  
+
+  // Creating a new list of point based on what is left
+  for(Size i = 0; i < outSidePoints.size(); i++){
+    result.push(inXfos[outSidePoints[i]]);
+  }
+}

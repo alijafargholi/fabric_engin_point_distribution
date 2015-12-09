@@ -1,0 +1,7 @@
+dfgEntry {
+  for(Size i=0; i<inXfos.size(); i++){
+    if (100*mathRandomFloat64(seed, i)>removePerc){
+      outXfo.push(inXfos[i]);
+    }
+  }
+}

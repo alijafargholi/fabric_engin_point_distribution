@@ -1,0 +1,76 @@
+dfgEntry {
+  if(mesh==false){
+    report("No scatter base geometry was found!!!!!");
+    return;
+  }
+  // Creating global variabels
+  Xfo current_position;
+  Xfo offset_position;
+  Scalar random_position_x;
+  Scalar random_position_y;
+  Scalar random_position_z;
+
+  Scalar random_rotation_x;
+  Scalar random_rotation_y;
+  Scalar random_rotation_z;
+
+  Scalar random_scale_x;
+  Scalar random_scale_y;
+  Scalar random_scale_z;
+
+  // Getting the number of vertices from the mesh
+  Size vertices_count = mesh.pointCount();
+  
+  //Size seed =1;
+  
+  // Setting the size of the arry
+  pointPosition.resize(vertices_count);
+  
+  // Adding the mesh position to the array list
+  for(Size vertex=0; vertex<vertices_count; vertex++){
+    // Querry the position of the current index
+    current_position = mesh.getPointPosition(vertex);
+    
+    /// Setter from single channels, the rotation being in degrees
+    if (TranslateVariance==true){
+      random_position_x = Math_linearInterpolate( TranslateXMinMax.x, TranslateXMinMax.y, mathRandomFloat32(TranslateSeed+GlobalSeed, vertex));
+      random_position_y = Math_linearInterpolate( TranslateYMinMax.x, TranslateYMinMax.y, mathRandomFloat32(TranslateSeed+GlobalSeed+1, vertex));
+      random_position_z = Math_linearInterpolate( TranslateZMinMax.x, TranslateZMinMax.y, mathRandomFloat32(TranslateSeed+GlobalSeed+2, vertex));
+    }else{
+      random_position_x = 1;
+      random_position_y = 1;
+      random_position_z = 1;
+    }
+
+    if (RotationVariance==true){
+      random_rotation_x = Math_linearInterpolate( RotationXMinMax.x, RotationXMinMax.y, mathRandomFloat32(RotationSeed+GlobalSeed+3, vertex));
+      random_rotation_y = Math_linearInterpolate( RotationYMinMax.x, RotationYMinMax.y, mathRandomFloat32(RotationSeed+GlobalSeed+4, vertex));
+      random_rotation_z = Math_linearInterpolate( RotationZMinMax.x, RotationZMinMax.y, mathRandomFloat32(RotationSeed+GlobalSeed+5, vertex));
+    }else{
+      random_rotation_x = 1;
+      random_rotation_x = 1;
+      random_rotation_x = 1;
+    }
+
+    if (ScaleVariance==true){
+      if(UniformScale==true){
+        Scalar uniform_scale = Math_linearInterpolate( UniformScaleMinMax.x, UniformScaleMinMax.y, mathRandomFloat32(ScaleSeed+GlobalSeed+6, vertex));
+        random_scale_x = uniform_scale;
+        random_scale_y = uniform_scale;
+        random_scale_z = uniform_scale;
+      }else{
+        random_scale_x = Math_linearInterpolate( ScaleXMinMax.x, ScaleXMinMax.y, mathRandomFloat32(ScaleSeed+GlobalSeed+6, vertex));
+        random_scale_y = Math_linearInterpolate( ScaleYMinMax.x, ScaleYMinMax.y, mathRandomFloat32(ScaleSeed+GlobalSeed+7, vertex));
+        random_scale_z = Math_linearInterpolate( ScaleZMinMax.x, ScaleZMinMax.y, mathRandomFloat32(ScaleSeed+GlobalSeed+8, vertex));
+      }
+    }else{
+      random_scale_x = 1;
+      random_scale_y = 1;
+      random_scale_z = 1;
+    }
+
+    offset_position.XfoFromScalars( random_scale_x, random_scale_y, random_scale_y, random_rotation_x, random_rotation_y, random_rotation_z, random_position_x, random_position_y, random_position_z );
+    
+    pointPosition[vertex] = current_position * offset_position;
+  }
+}
